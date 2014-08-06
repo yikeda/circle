@@ -1,15 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Main : MonoBehaviour {
 
-	private List<float> params;
-	
 	void Start () {
-		params = new List<float>();
 	}
 	
-	void Update () {
-	
+	void Update () {	
 	}
 }
