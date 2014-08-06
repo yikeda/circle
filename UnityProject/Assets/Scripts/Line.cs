@@ -27,13 +27,16 @@ public class Line : MonoBehaviour {
 			set { distance = value; }
 		}
 	}
+
+	[SerializeField] int size = 100;
+	[SerializeField] float distanceOffset = 0.1f;
+	[SerializeField] int rotationRange = 10;
+	
 	
 	private List<LinePosition> positions;
 	private LineRenderer lineRenderer;
 	
 	void Start () {
-		int size = 100;
-		
 		lineRenderer = this.GetComponent<LineRenderer>();
 		lineRenderer.SetVertexCount(size);
 		
@@ -41,18 +44,31 @@ public class Line : MonoBehaviour {
 
 		for(int i = 0; i < size; i++)
 		{
-			float rotation = 0;
-			positions.Add(new LinePosition(rotation,i));
-
-			Vector3 position = new Vector3(0,0,i);
-			lineRenderer.SetPosition(i, position);
+			float rotation = rotationRange * Mathf.Deg2Rad * i;
+			float distance = i * distanceOffset;
+			positions.Add(new LinePosition(rotation,distance));			
 		}
 
 	}
-	
 	void Update () {
+		int index = 0;
+		foreach(LinePosition linePosiiton in positions)
+		{			
+			float x = Mathf.Cos(linePosiiton.Rotation) * linePosiiton.Distance;
+			float z = Mathf.Sin(linePosiiton.Rotation) * linePosiiton.Distance;
+						
+			Vector3 position = new Vector3(x,0,z);
+			lineRenderer.SetPosition(index, position);
+			index++;
 
-		
-		
-	}
+			if (distanceOffset * size < linePosiiton.Distance)				
+			{
+				linePosiiton.Distance = 0;
+			}
+			else
+			{
+				linePosiiton.Distance += 0.1f;				
+			}
+		}
+	}			
 }
