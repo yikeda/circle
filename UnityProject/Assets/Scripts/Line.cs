@@ -104,7 +104,7 @@ public class Line : MonoBehaviour {
 	void UpdateLine()
 	{
 		int index = 0;
-		float offset = -90.0f * Mathf.Deg2Rad;
+		float offset = 135.0f * Mathf.Deg2Rad;
 		foreach(LinePosition linePosition in positions)
 		{
 			float x = Mathf.Cos(linePosition.Rotation + offset) * linePosition.Distance;
