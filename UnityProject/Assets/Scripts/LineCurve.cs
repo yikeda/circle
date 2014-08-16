@@ -107,13 +107,14 @@ public class LineCurve : MonoBehaviour {
 		
 		if (progressTime > rotateTime)
 		{
-			float seconds = UnityEngine.Random.Range(0.5f,1.5f);
+			float seconds = UnityEngine.Random.Range(0.5f,1.0f);
 			rotateTime = TimeSpan.FromSeconds(seconds);
 			rotateStartTime = DateTime.Now;
 			progressTime = TimeSpan.FromSeconds(0);
 
 			baseRotation = currentRotation;
-			targetRotation = UnityEngine.Random.Range(0.0f, Mathf.PI * 3.0f);
+			targetRotation = UnityEngine.Random.Range(Mathf.PI, Mathf.PI * 3.0f);			
+			//targetRotation = UnityEngine.Random.Range(0.0f, Mathf.PI * 3.0f);
 			//targetRotation = baseRotation + Mathf.PI * 2.0f;
 		}
 		
@@ -133,8 +134,9 @@ public class LineCurve : MonoBehaviour {
 		}
 	}
 
-	void UpdateLine ()
+	void UpdateLineOld ()
 	{
+
 		int index = 0;
 		foreach(GameObject bullet in Enumerable.Reverse(bullets))
 		{
@@ -146,5 +148,15 @@ public class LineCurve : MonoBehaviour {
 			index++;
 		}
 	}
-		
+
+	void UpdateLine ()
+	{
+		for (int i = 0; i < lineRendererSize; i++)
+		{
+			float rate = (float)i / (float)lineRendererSize;
+			Vector3 position = spline.Interpolate(rate);
+			lineRenderer.SetPosition(i, position);						
+		}
+	}
+
 }
