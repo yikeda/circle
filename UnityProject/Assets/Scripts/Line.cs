@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 [RequireComponent(typeof(LineRenderer))]
+[RequireComponent(typeof(CurvySpline))]
 public class Line : MonoBehaviour {
 
 	public class LinePosition {
@@ -40,10 +41,14 @@ public class Line : MonoBehaviour {
 	private float targetRotation;
 	private DateTime rotateStartTime;
 	private TimeSpan rotateTime;
+	private CurvySpline spline;
 	
 	void Start () {
 		lineRenderer = this.GetComponent<LineRenderer>();
 		lineRenderer.SetVertexCount(size);
+		
+		spline = this.GetComponent<CurvySpline>();
+		
 		positions = new List<LinePosition>();
 
 		rotateTime = TimeSpan.FromSeconds(5);
