@@ -27,7 +27,6 @@ public class LineCurve : MonoBehaviour {
 	private DateTime rotateStartTime;
 	private TimeSpan rotateTime;
 	private bool isSplineInitialized;
-	private DeviceRotation deviceRotation;
 	
 	void Start ()
 	{
@@ -40,10 +39,7 @@ public class LineCurve : MonoBehaviour {
 		
 		lastShotTime = DateTime.Now;
 
-		spline = GetComponent<CurvySpline>();
-
-		deviceRotation = (DeviceRotation)gameObject.AddComponent("DeviceRotation");
-		deviceRotation.ResetDeviceRotation();
+		spline = GetComponent<CurvySpline>();		
 	}
 	
 	void Update ()
@@ -53,8 +49,7 @@ public class LineCurve : MonoBehaviour {
 		
 		CheckRange();
 		
-		//UpdateTargetRotation();
-		UpdateTargetRotationDevice();
+		UpdateTargetRotation();
 		UpdateCurvyPosition();
 		UpdateLine();
 		
@@ -125,13 +120,6 @@ public class LineCurve : MonoBehaviour {
 		
 		float rate = (float)progressTime.Ticks / (float)rotateTime.Ticks;
 		currentRotation = Mathf.Lerp(baseRotation, targetRotation, rate);
-	}
-
-	void UpdateTargetRotationDevice()
-	{
-		Quaternion rotation = Quaternion.Inverse(this.deviceRotation.Z);	
-		var newRotation = rotation.eulerAngles;	
-		currentRotation = newRotation.z * Mathf.Deg2Rad;
 	}
 	
 	void UpdateCurvyPosition ()

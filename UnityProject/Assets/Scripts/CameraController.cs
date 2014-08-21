@@ -17,6 +17,6 @@ public class CameraController : MonoBehaviour
 		newRotation.x = 90;
 		newRotation.y = -newRotation.z;
 		newRotation.z = 0;
-		//transform.rotation = Quaternion.Euler(newRotation);
+		transform.rotation = Quaternion.Euler(newRotation);
 	}	
 }
