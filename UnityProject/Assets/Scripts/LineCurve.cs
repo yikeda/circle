@@ -12,7 +12,6 @@ public class LineCurve : MonoBehaviour {
 	[SerializeField] int bulletSize = 20;
 	[SerializeField] int controlPointSize = 10;	
 	[SerializeField] float interval = 1.0f;
-	[SerializeField] float range = 100.0f;
 	[SerializeField] float shotPower = 1.0f;		
 	
 	private LineRenderer lineRenderer;
@@ -47,7 +46,7 @@ public class LineCurve : MonoBehaviour {
 		if (!isSplineInitialized && spline != null && spline.IsInitialized)
 			initCurvySpline();
 		
-		CheckRange();
+		CheckBufferSize();
 		
 		UpdateTargetRotation();
 		UpdateCurvyPosition();
@@ -83,23 +82,25 @@ public class LineCurve : MonoBehaviour {
 		lastShotTime = DateTime.Now;
 	}
 
-	void CheckRange ()
+	void CheckBufferSize ()
 	{
-		List<GameObject> removeList = new List<GameObject>();
-		
-		foreach(GameObject bullet in bullets)
-		{
-			float distance = Vector3.Distance(bullet.transform.position, Vector3.zero);
+		int diff = bulletSize - bullets.Count;
 
-			if (distance > range)
-			{				
-				removeList.Add(bullet);
-				GameObject.Destroy(bullet);
-			}
+		if (diff >= 0)
+			return;
+		
+		List<GameObject> removeList = new List<GameObject>();
+
+		for(int i = 0; i < diff; i++)
+		{
+			GameObject bullet = bullets[i];
+			removeList.Add(bullet);
+			GameObject.Destroy(bullet);			
 		}
 
 		bullets.RemoveAll(s => removeList.Contains(s));
 	}
+
 	
 	void UpdateTargetRotation()
 	{
@@ -107,13 +108,15 @@ public class LineCurve : MonoBehaviour {
 		
 		if (progressTime > rotateTime)
 		{
-			float seconds = UnityEngine.Random.Range(0.5f,1.0f);
+			//float seconds = UnityEngine.Random.Range(3.5f,1.0f);
+			float seconds = 5.0f;
 			rotateTime = TimeSpan.FromSeconds(seconds);
 			rotateStartTime = DateTime.Now;
 			progressTime = TimeSpan.FromSeconds(0);
 
 			baseRotation = currentRotation;
-			targetRotation = UnityEngine.Random.Range(Mathf.PI, Mathf.PI * 3.0f);			
+			targetRotation = UnityEngine.Random.Range(-Mathf.PI * 2.0f, Mathf.PI * 2.0f);
+			//targetRotation = Mathf.PI * seconds;
 			//targetRotation = UnityEngine.Random.Range(0.0f, Mathf.PI * 3.0f);
 			//targetRotation = baseRotation + Mathf.PI * 2.0f;
 		}
